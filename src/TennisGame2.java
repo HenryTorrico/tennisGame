@@ -29,12 +29,7 @@ public class TennisGame2 implements TennisGame
         
         score = advantage(score);
         
-        score = win(score);
-        return score;
-    }
-
-	private String win(String score) {
-		if (P1point>=4 && P2point>=0 && (P1point-P2point)>=2) // 2 es valor estatico
+        if (P1point>=4 && P2point>=0 && (P1point-P2point)>=2) // 2 es valor estatico
         {
             score = "Win for player1";
         }
@@ -42,8 +37,8 @@ public class TennisGame2 implements TennisGame
         {
             score = "Win for player2";
         }
-		return score;
-	}
+        return score;
+    }
 
 	private String advantage(String score) {
 		if (P1point > P2point && P2point >= 3) // 3 es valor estatico
@@ -107,18 +102,28 @@ public class TennisGame2 implements TennisGame
 	}
 
 	private String normal(String score) {
-		if (P1point > 0 && P2point==0) // 0-1-2-3 es valor estatico e ifs anidados
+		int p1point2 = P1point;
+		int p2point2 = P2point;
+		if (p1point2 > 0 && p2point2==0) // 0-1-2-3 es valor estatico e ifs anidados
         { 
-            if (P1point==1)
-                P1res = "Fifteen";
-            if (P1point==2)
-                P1res = "Thirty";
-            if (P1point==3)
-                P1res = "Forty";
-            P2res = "Love";
+            P1res=getLiteral(p1point2);
+            P2res = getLiteral(p2point2);
             score = P1res + "-" + P2res;
         }
 		return score;
+	}
+
+	private String getLiteral(int p1point2) {
+		String result="";
+		if (p1point2==0)
+			result = "Love";
+		if (p1point2==1)
+			result = "Fifteen";
+		if (p1point2==2)
+			result = "Thirty";
+		if (p1point2==3)
+			result = "Forty";
+		return result;
 	}
 
 	private String tie(String score) {
