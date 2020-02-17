@@ -18,7 +18,6 @@ public class TennisGame2 implements TennisGame
         String score = "";
         score = tie(score);
         score = deuce(score);
-        
         score = normal(score);
         score = normal1(score);
         
