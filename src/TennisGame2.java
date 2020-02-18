@@ -1,91 +1,77 @@
 
 public class TennisGame2 implements TennisGame
 {
-    private static final int INITIAL_VALUE_FOR_POINTS = 0;
+    private static final int _FORTY = 3;
+	private static final int _THIRTY = 2;
+	private static final int _FIFTEEN = 1;
+	private static final int _LOVE = 0;
+	private static final int INITIAL_VALUE_FOR_POINTS = 0;
 	public int player1Point = INITIAL_VALUE_FOR_POINTS; // nombres poco descriptivos
     public int player2Point = INITIAL_VALUE_FOR_POINTS; // nombres poco descriptivos
     
-    public String player1Result = ""; // nombres poco descriptivos
-    public String player2Result = ""; // nombres poco descriptivos
     private String player1Name;
     private String player2Name;
+    
+    private String literalScore="";
 
     public TennisGame2(String player1Name, String player2Name) {
         this.player1Name = player1Name;
         this.player2Name = player2Name;
     }
 
-    public String getScore(){
-        String score = "";
-        score = tie(score);
-        score = deuce(score);
-        score = getPoints(score);
-        score = hasAdvantage(score);
-        return winner(score);
+    public String getLiteralScore(){
+    	if (isNormal())  
+    		literalScore = getLiteral(player1Point) + "-" + getLiteral(player2Point);
+        if (isTie())
+        	literalScore = getLiteral(player1Point)+ "-All";
+        if (isDeuce())
+            literalScore = "Deuce";
+        if (isInAdvantageOver(player1Point,player2Point))
+            literalScore = "Advantage player1";
+        if (isInAdvantageOver(player2Point,player1Point))
+            literalScore = "Advantage player2";
+        if (winnerOver(player1Point,player2Point))
+            literalScore = "Win for player1";
+        if (winnerOver(player2Point,player1Point))
+            literalScore = "Win for player2";
+        return literalScore;
     }
 
-	private String winner(String score) {
-		if (player1Point>=4 && player2Point>=0 && (player1Point-player2Point)>=2) // 2 es valor estatico
-        {
-            score = "Win for player1";
-        }
-        if (player2Point>=4 && player1Point>=0 && (player2Point-player1Point)>=2) // 2 es valor estatico
-        {
-            score = "Win for player2";
-        }
-        return score;
+
+	private boolean winnerOver(int player1Point,int player2Point) {
+		return player1Point>_FORTY && player2Point>=_LOVE && (player1Point-player2Point)>=_THIRTY;
 	}
 
-	private String hasAdvantage(String score) {
-		if (player1Point > player2Point && player2Point >= 3) // 3 es valor estatico
-        {
-            score = "Advantage player1";
-        }
-        
-        if (player2Point > player1Point && player1Point >= 3) // 3 es valor estatico
-        {
-            score = "Advantage player2";
-        }
-		return score;
+
+	private boolean isInAdvantageOver(int player1Points,int player2Points) {
+		return player1Points > player2Points && player2Points >= _FORTY;
 	}
 
-	private String getPoints(String score) {
-		if (player2Point !=player1Point)
-        {      
-            player1Result = getLiteral(player1Point);
-            player2Result = getLiteral(player2Point);
-            score = player1Result + "-" + player2Result;
-        }
-		return score;
+	private boolean isNormal() {
+		return player2Point !=player1Point;
 	}
 
 
 	private String getLiteral(int playerPoints) {
 		String result="";
-		if (playerPoints==0)
+		if (playerPoints==_LOVE)
 			result = "Love";
-		if (playerPoints==1)
+		if (playerPoints==_FIFTEEN)
 			result = "Fifteen";
-		if (playerPoints==2)
+		if (playerPoints==_THIRTY)
 			result = "Thirty";
-		if (playerPoints==3)
+		if (playerPoints==_FORTY)
 			result = "Forty";
 		return result;
 	}
 
-	private String tie(String score) {
-		if (player1Point == player2Point && player1Point < 4)
-        {
-            score = getLiteral(player1Point);
-            score += "-All";
-        }
-		return score;
+	private boolean isTie() {
+		return player1Point == player2Point && player1Point <= _FORTY;
 	}
 
-	private String deuce(String score) {
-		if (player1Point==player2Point && player1Point>=3) // el 3 es un valor estatico
-            score = "Deuce";
-		return score;
+
+	private boolean isDeuce() {
+		return player1Point==player2Point && player1Point>=_FORTY;
 	}
     
     public void setPlayer1Score(int number){
